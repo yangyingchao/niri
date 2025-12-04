@@ -817,6 +817,7 @@ mod tests {
                 open-fullscreen false
                 open-floating false
                 open-focused true
+                stay-focused true
                 default-window-height { fixed 500; }
                 default-column-display "tabbed"
                 default-floating-position x=100 y=-200 relative-to="bottom-left"
@@ -1711,6 +1712,9 @@ mod tests {
                         false,
                     ),
                     open_focused: Some(
+                        true,
+                    ),
+                    stay_focused: Some(
                         true,
                     ),
                     min_width: None,

@@ -1581,6 +1581,10 @@ impl<W: LayoutElement> Workspace<W> {
         self.windows_mut().find(|win| win.is_wl_surface(wl_surface))
     }
 
+    pub fn find_wl_stayfocused_mut(&mut self, wl_surface: &WlSurface) -> Option<&mut W> {
+        self.windows_mut().find(|win| win.is_wl_surface(wl_surface))
+    }
+
     pub fn tiles_with_render_positions(
         &self,
     ) -> impl Iterator<Item = (&Tile<W>, Point<f64, Logical>, bool)> {
