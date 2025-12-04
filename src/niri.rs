@@ -1132,6 +1132,14 @@ impl State {
         }
 
         // Compute the current focus.
+        // Check if there's a window that should stay focused.
+        let stay_focused_window = self.niri.layout.windows()
+            .find(|(_, win)| win.rules().stay_focused.is_some_and(|x| x))
+            .map(|(_, win)| win.toplevel().wl_surface().clone())
+            .map(|surface| KeyboardFocus::Layout {
+                surface: Some(surface),
+            });
+
         let focus = if self.niri.exit_confirm_dialog.is_open() {
             KeyboardFocus::ExitConfirmDialog
         } else if self.niri.is_locked() {
@@ -1142,6 +1150,9 @@ impl State {
             KeyboardFocus::ScreenshotUi
         } else if self.niri.window_mru_ui.is_open() {
             KeyboardFocus::Mru
+        } else if let Some(stay_focused) = stay_focused_window.clone() {
+            // If there's a stay_focused window, prioritize it over normal layout focus.
+            stay_focused
         } else if let Some(output) = self.niri.layout.active_output() {
             let mon = self.niri.layout.monitor_for_output(output).unwrap();
             let layers = layer_map_for_output(output);
